@@ -48,7 +48,7 @@ function configure(entry, dest) {
 			rules: [{
 				test:    /\.js$/,
 				exclude: /node_modules/,
-				loader:  'babel-loader',
+				loader:  ['babel-loader', 'eslint-loader'],
 				query:   update(pkg.babel, {
 					babelrc: { $set: false },
 					presets: {
@@ -62,13 +62,22 @@ function configure(entry, dest) {
 
 function configureDev(entry, dest) {
 	return update(configure(entry, dest), {
+		entry:   { $push: [
+			'react-hot-loader/patch',
+			'webpack-dev-server/client?http://localhost:8080/',
+			'webpack/hot/only-dev-server'
+		] },
 		devtool: { $set: 'cheap-module-eval-source-map' },
+		output:  { publicPath: { $set: '/app' } },
+		module:  { rules: { 0: { query: { plugins: { $unshift: ['react-hot-loader/babel'] } } } } },
 		plugins: { $set: [
 			new webpack.DefinePlugin({
 				'process.env': {
 					'NODE_ENV': `'development'`
 				}
 			}),
+			new webpack.HotModuleReplacementPlugin(),
+			new webpack.NamedModulesPlugin(),
 			new webpack.NoEmitOnErrorsPlugin()
 		] }
 	});
