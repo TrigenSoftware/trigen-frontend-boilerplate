@@ -6,8 +6,6 @@ export default class Clicker extends React.Component {
 		increment: 0
 	};
 
-	someProp = true;
-
 	render() {
 		return (
 			<button onClick={this.increment.bind(this)}>
