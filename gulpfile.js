@@ -1,5 +1,5 @@
 /**
- * Gulpfile.js with tasks for frontend JavaScript development.
+ * Gulpfile.js with tasks for frontend React.js development.
  */
 
 /**
@@ -12,6 +12,8 @@ const { notify, reportError } = require('./helpers'),
 	live    = require('gulp-livereload'),
 	replace = require('gulp-replace'),
 	sm      = require('gulp-sourcemaps'),
+	connect = require('gulp-connect'),
+	path    = require('path'),
 
 	inject   = require('gulp-inject-reload'),
 	procss   = require('gulp-progressive-css'),
@@ -28,6 +30,7 @@ const { notify, reportError } = require('./helpers'),
 
 	WebpackDevServer = require('webpack-dev-server'),
 	webpack = require('webpack'),
+	esLint  = require('gulp-eslint'),
 
 	pkg = require('./package.json'),
 	wpk = require('./webpack.config');
@@ -45,7 +48,12 @@ const paths = {
 	scripts: [
 		'src/app/main.js',
 		'src/app/**/*.js'
-	]
+	],
+	dest:    {
+		root:   'dist',
+		app:    'dist/app',
+		images: 'dist/images'
+	}
 };
 
 /**
@@ -68,7 +76,7 @@ gulp.task('html:lint', () =>
 gulp.task('html:dev', gulp.parallel('html:lint', () =>
 	gulp.src(paths.html)
 		.pipe(inject())
-		.pipe(gulp.dest('dist'))
+		.pipe(gulp.dest(paths.dest.root))
 		.pipe(live())
 		.pipe(notify('HTML files are updated.'))
 ));
@@ -79,7 +87,7 @@ gulp.task('html:build', gulp.series('html:lint', () =>
 		.pipe(procss({ base: 'dist', useXHR: true }))
 		.pipe(htmlmin({ collapseWhitespace: true }))
 		.on('error', reportError)
-		.pipe(gulp.dest('dist'))
+		.pipe(gulp.dest(paths.dest.root))
 		.pipe(notify('HTML files are compiled.'))
 ));
 
@@ -100,7 +108,7 @@ gulp.task('images:dev', () =>
 		}, {
 			match:  '**/*.png'
 		}]))
-		.pipe(gulp.dest('dist/images'))
+		.pipe(gulp.dest(paths.dest.images))
 		.pipe(live())
 		.pipe(notify('Images are updated.'))
 );
@@ -113,7 +121,7 @@ gulp.task('images:build', () =>
 		}, {
 			match:  '**/*.png'
 		}]))
-		.pipe(gulp.dest('dist/images'))
+		.pipe(gulp.dest(paths.dest.images))
 		.pipe(notify('Images are generated.'))
 );
 
@@ -142,7 +150,7 @@ gulp.task('style:dev', gulp.parallel('style:lint', () =>
 			.on('error', reportError)
 			.pipe(auto({ browsers }))
 		.pipe(sm.write())
-		.pipe(gulp.dest('dist/images'))
+		.pipe(gulp.dest(paths.dest.app))
 		.pipe(live())
 		.pipe(notify('Styles are updated.'))
 ));
@@ -156,7 +164,7 @@ gulp.task('style:build', gulp.series('style:lint', () =>
 			reduceIdents: false,
 			zindex:       false
 		}))
-		.pipe(gulp.dest('dist/images'))
+		.pipe(gulp.dest(paths.dest.app))
 		.pipe(notify('Styles are compiled.'))
 ));
 
@@ -164,8 +172,20 @@ gulp.task('style:build', gulp.series('style:lint', () =>
  * Webpack compilers
  */
 
-const webpackDevCompiler = webpack(wpk.dev(paths.scripts[0], 'dist/app')),
-	webpackBuildCompiler = webpack(wpk.build(paths.scripts[0], 'dist/app'));
+const webpackDevCompiler = webpack(wpk.dev(paths.scripts[0], paths.dest.app)),
+	webpackBuildCompiler = webpack(wpk.build(paths.scripts[0], paths.dest.app));
+
+/**
+ * JavaScript tasks
+ */
+
+gulp.task('script:lint', () =>
+	gulp.src(paths.scripts)
+		.pipe(esLint())
+		.pipe(esLint.format())
+		.pipe(esLint.failAfterError())
+		.on('error', reportError)
+);
 
 /**
  * Webpack tasks
@@ -175,8 +195,8 @@ gulp.task('webpack:dev', (done) => {
 
 	const webpackDevServer = new WebpackDevServer(webpackDevCompiler, {
 		hot:         true,
-		contentBase: 'dist',
-		publicPath:  webpackDevCompiler.output.publicPath,
+		contentBase: path.join(__dirname, 'dist'),
+		publicPath:  webpackDevCompiler.options.output.publicPath,
 		stats:       {
 			chunks: false,
 			colors: true
@@ -197,9 +217,14 @@ gulp.task('webpack:dev', (done) => {
 
 		return done();
 	});
+
+	gulp.watch(paths.scripts, gulp.series('script:lint'))
+		.on('change', () => {
+			notify('Scripts are updated.', true);
+		});
 });
 
-gulp.task('webpack:build', done =>
+gulp.task('webpack:build', gulp.series('script:lint', done =>
 	webpackBuildCompiler.run((error, stats) => {
 
 		if (error) {
@@ -210,7 +235,7 @@ gulp.task('webpack:build', done =>
 		if (stats.hasErrors()) {
 			notify.onError(new Error('Webpack compilation is failed.'));
 		} else {
-			notify('Scripts are updated.', true);
+			notify('Scripts are compiled.', true);
 		}
 
 		gutil.log(`${gutil.colors.cyan('webpack')}:`, `\n${stats.toString({
@@ -220,13 +245,24 @@ gulp.task('webpack:build', done =>
 
 		return done();
 	})
-);
+));
 
 /**
  * Main tasks
  */
 
+gulp.task('server', (done) => {
+	connect.server({
+		root: 'dist'
+	});
+	done();
+});
+
 gulp.task('watch', gulp.parallel(
+	(done) => {
+		live.listen();
+		done();
+	},
 	'html:watch',
 	'images:watch',
 	'style:watch'

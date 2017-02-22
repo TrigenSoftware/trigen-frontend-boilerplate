@@ -21,30 +21,27 @@ Boilerplate for frontend development.
 │ └── style:lint
 ├─┬ style:build
 │ └── style:lint
-├── script:watch
 ├── script:lint
-├─┬ script:dev
+├─┬ webpack:dev
 │ └── script:lint
-├─┬ script:build
+├─┬ webpack:build
 │ └── script:lint
+├── server
 ├─┬ watch
 │ ├── html:watch
 │ ├── images:watch
-│ ├── style:watch
-│ └── script:watch
-├── server
+│ └── style:watch
 ├─┬ dev
 │ └─┬── html:dev
 │   ├── images:dev
 │   ├── style:dev
-│   ├── script:dev
-│   ├── server
+│   ├── webpack:dev
 │   └── watch
 ├─┬ build
 │ └─┬── html:build
 │   ├── images:build
 │   ├── style:build
-│   └── script:build
+│   └── webpack:build
 └─┬ default
   └── dev
 ```

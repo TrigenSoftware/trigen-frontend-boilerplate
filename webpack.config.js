@@ -48,7 +48,7 @@ function configure(entry, dest) {
 			rules: [{
 				test:    /\.js$/,
 				exclude: /node_modules/,
-				loader:  ['babel-loader', 'eslint-loader'],
+				loader:  'babel-loader',
 				query:   update(pkg.babel, {
 					babelrc: { $set: false },
 					presets: {

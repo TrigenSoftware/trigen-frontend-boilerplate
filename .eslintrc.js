@@ -1,5 +1,5 @@
 module.exports = {
-	'extends': 'trigen/base',
+	'extends': 'trigen',
 	'env': {
 		'browser': true
 	}

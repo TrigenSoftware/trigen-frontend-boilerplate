@@ -1,10 +1,22 @@
+import React from 'react';
 
-let counter = 0;
+export default class Clicker extends React.Component {
 
-export function increase() {
-	return ++counter;
-}
+	state = {
+		increment: 0
+	};
 
-export function wtf() {
-	alert('wtf');
+	render() {
+		return (
+			<button onClick={this.increment.bind(this)}>
+				{this.state.increment}
+			</button>
+		);
+	}
+
+	increment() {
+		this.setState({
+			increment: this.state.increment + 1
+		});
+	}
 }

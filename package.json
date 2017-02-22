@@ -1,6 +1,6 @@
 {
   "name": "trigen-frontend-boilerplate",
-  "version": "0.2.1",
+  "version": "0.4.0",
   "description": "Boilerplate for frontend development.",
   "main": "gulpfile.js",
   "repository": "https://github.com/TrigenSoftware/trigen-frontend-boilerplate",
@@ -8,6 +8,10 @@
   "license": "MIT",
   "engines": {
     "node": ">=6.4.0"
+  },
+  "scripts": {
+    "build": "gulp build",
+    "test": "gulp html:lint && gulp style:lint && gulp script:lint"
   },
   "dependencies": {
     "babel-polyfill": "^6.23.0",
@@ -31,13 +35,16 @@
     "babel-preset-stage-0": "^6.22.0",
     "babili-webpack-plugin": "^0.0.10",
     "eslint-config-trigen": "^1.1.1",
-    "eslint-loader": "^1.6.1",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-cli": "^1.2.2",
+    "gulp-connect": "^5.0.0",
     "gulp-cssnano": "^2.1.2",
+    "gulp-eslint": "^3.0.1",
     "gulp-html-linter": "^1.0.0",
     "gulp-htmlmin": "^3.0.0",
+    "gulp-inject-reload": "^0.0.2",
+    "gulp-livereload": "^3.8.1",
     "gulp-notify": "^3.0.0",
     "gulp-progressive-css": "^1.0.3",
     "gulp-replace": "^0.5.4",
@@ -48,7 +55,7 @@
     "gulp-util": "^3.0.8",
     "htmllint-config-trigen": "^1.0.0",
     "immutability-helper": "^2.1.1",
-    "react-hot-loader": "^1.3.1",
+    "react-hot-loader": "next",
     "sass-import-modules": "^2.1.0",
     "stylelint-config-trigen": "^1.2.1",
     "webpack": "^2.2.1",

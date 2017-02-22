@@ -1,6 +1,9 @@
 import 'babel-polyfill';
-import { increase } from './clicker/clicker';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Clicker from './clicker/clicker';
 
-document.querySelector('header').addEventListener('click', () => {
-	document.querySelector('header h1').innerText = increase();
-});
+ReactDOM.render(
+	<Clicker/>,
+	document.querySelector('#view')
+);
