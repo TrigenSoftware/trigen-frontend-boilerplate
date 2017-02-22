@@ -27,12 +27,12 @@ Boilerplate for frontend development.
 │ └── script:lint
 ├─┬ script:build
 │ └── script:lint
+├── server
 ├─┬ watch
 │ ├── html:watch
 │ ├── images:watch
 │ ├── style:watch
 │ └── script:watch
-├── server
 ├─┬ dev
 │ └─┬── html:dev
 │   ├── images:dev

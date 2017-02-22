@@ -46,7 +46,12 @@ const paths = {
 	scripts: [
 		'src/app/main.js',
 		'src/app/**/*.js'
-	]
+	],
+	dest:    {
+		root:   'dist',
+		app:    'dist/app',
+		images: 'dist/images'
+	}
 };
 
 /**
@@ -68,7 +73,7 @@ gulp.task('html:lint', () =>
 
 gulp.task('html:dev', gulp.parallel('html:lint', () =>
 	gulp.src(paths.html)
-		.pipe(gulp.dest('dist'))
+		.pipe(gulp.dest(paths.dest.root))
 		.pipe(connect.reload())
 		.pipe(notify('HTML files are updated.'))
 ));
@@ -79,7 +84,7 @@ gulp.task('html:build', gulp.series('html:lint', () =>
 		.pipe(procss({ base: 'dist', useXHR: true }))
 		.pipe(htmlmin({ collapseWhitespace: true }))
 		.on('error', reportError)
-		.pipe(gulp.dest('dist'))
+		.pipe(gulp.dest(paths.dest.root))
 		.pipe(notify('HTML files are compiled.'))
 ));
 
@@ -100,7 +105,7 @@ gulp.task('images:dev', () =>
 		}, {
 			match:  '**/*.png'
 		}]))
-		.pipe(gulp.dest('dist/images'))
+		.pipe(gulp.dest(paths.dest.images))
 		.pipe(connect.reload())
 		.pipe(notify('Images are updated.'))
 );
@@ -113,7 +118,7 @@ gulp.task('images:build', () =>
 		}, {
 			match:  '**/*.png'
 		}]))
-		.pipe(gulp.dest('dist/images'))
+		.pipe(gulp.dest(paths.dest.images))
 		.pipe(notify('Images are generated.'))
 );
 
@@ -142,7 +147,7 @@ gulp.task('style:dev', gulp.parallel('style:lint', () =>
 			.on('error', reportError)
 			.pipe(auto({ browsers }))
 		.pipe(sm.write())
-		.pipe(gulp.dest('dist/images'))
+		.pipe(gulp.dest(paths.dest.app))
 		.pipe(connect.reload())
 		.pipe(notify('Styles are updated.'))
 ));
@@ -156,7 +161,7 @@ gulp.task('style:build', gulp.series('style:lint', () =>
 			reduceIdents: false,
 			zindex:       false
 		}))
-		.pipe(gulp.dest('dist/images'))
+		.pipe(gulp.dest(paths.dest.app))
 		.pipe(notify('Styles are compiled.'))
 ));
 
@@ -219,7 +224,7 @@ gulp.task('script:build', gulp.series('script:lint', done =>
 		if (stats.hasErrors()) {
 			notify.onError(new Error('Webpack compilation is failed.'));
 		} else {
-			notify('Scripts are updated.', true);
+			notify('Scripts are compiled.', true);
 		}
 
 		gutil.log(`${gutil.colors.cyan('webpack')}:`, `\n${stats.toString({
@@ -235,13 +240,6 @@ gulp.task('script:build', gulp.series('script:lint', done =>
  * Main tasks
  */
 
-gulp.task('watch', gulp.parallel(
-	'html:watch',
-	'images:watch',
-	'style:watch',
-	'script:watch'
-));
-
 gulp.task('server', (done) => {
 	connect.server({
 		root:       'dist',
@@ -249,6 +247,13 @@ gulp.task('server', (done) => {
 	});
 	done();
 });
+
+gulp.task('watch', gulp.parallel(
+	'html:watch',
+	'images:watch',
+	'style:watch',
+	'script:watch'
+));
 
 gulp.task('dev', gulp.series(
 	'server',
