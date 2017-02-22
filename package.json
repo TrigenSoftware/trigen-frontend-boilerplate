@@ -34,7 +34,7 @@
     "babel-preset-react": "^6.23.0",
     "babel-preset-stage-0": "^6.22.0",
     "babili-webpack-plugin": "^0.0.10",
-    "eslint-config-trigen": "^1.1.1",
+    "eslint-config-trigen": "^1.2.0",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-cli": "^1.2.2",
