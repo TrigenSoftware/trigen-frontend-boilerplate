@@ -19,7 +19,7 @@ const { notify, reportError, extendGulpConnect } = require('./helpers'),
 
 	srcset = require('gulp-srcset'),
 
-	importer  = require('sass-import-modules'),
+	importer  = require('sass-modules-importer'),
 	csso      = require('gulp-cssnano'),
 	auto      = require('gulp-autoprefixer'),
 	sass      = require('gulp-sass'),
@@ -143,7 +143,7 @@ gulp.task('style:lint', () =>
 gulp.task('style:dev', gulp.parallel('style:lint', () =>
 	gulp.src(paths.styles)
 		.pipe(sm.init())
-			.pipe(sass({ importer }))
+			.pipe(sass({ importer: importer() }))
 			.on('error', reportError)
 			.pipe(auto({ browsers }))
 		.pipe(sm.write())
@@ -154,7 +154,7 @@ gulp.task('style:dev', gulp.parallel('style:lint', () =>
 
 gulp.task('style:build', gulp.series('style:lint', () =>
 	gulp.src(paths.styles)
-		.pipe(sass({ importer }))
+		.pipe(sass({ importer: importer() }))
 		.on('error', reportError)
 		.pipe(auto({ browsers }))
 		.pipe(csso({
