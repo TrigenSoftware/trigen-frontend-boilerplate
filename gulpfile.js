@@ -8,7 +8,6 @@
 
 const { notify, reportError } = require('./helpers'),
 	gulp    = require('gulp'),
-	gutil   = require('gulp-util'),
 	replace = require('gulp-replace'),
 	sm      = require('gulp-sourcemaps'),
 	connect = require('gulp-connect'),
