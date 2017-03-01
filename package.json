@@ -1,6 +1,6 @@
 {
   "name": "trigen-frontend-boilerplate",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Boilerplate for frontend development.",
   "main": "gulpfile.js",
   "repository": "https://github.com/TrigenSoftware/trigen-frontend-boilerplate",
@@ -32,7 +32,7 @@
     "gulp-srcset": "^1.0.1",
     "gulp-stylelint": "^3.8.0",
     "gulp-util": "^3.0.8",
-    "htmllint-config-trigen": "^1.0.0",
+    "htmllint-config-trigen": "^1.0.2",
     "sass-modules-importer": "^1.0.1",
     "stylelint-config-trigen": "^1.2.1"
   },
