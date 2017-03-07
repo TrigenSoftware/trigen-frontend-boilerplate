@@ -1,6 +1,6 @@
 {
   "name": "trigen-frontend-boilerplate",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "Boilerplate for frontend development.",
   "main": "gulpfile.js",
   "repository": "https://github.com/TrigenSoftware/trigen-frontend-boilerplate",
@@ -34,7 +34,7 @@
     "gulp-html-linter": "^1.0.0",
     "gulp-htmlmin": "^3.0.0",
     "gulp-notify": "^3.0.0",
-    "gulp-progressive-css": "^1.0.3",
+    "gulp-progressive-css": "^1.1.2",
     "gulp-replace": "^0.5.4",
     "gulp-sass": "^3.1.0",
     "gulp-sourcemaps": "^2.4.1",
