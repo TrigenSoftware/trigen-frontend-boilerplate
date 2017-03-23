@@ -10,6 +10,7 @@
     "node": ">=6.4.0"
   },
   "scripts": {
+    "dev": "gulp",
     "build": "gulp build",
     "test": "gulp html:lint && gulp style:lint"
   },
