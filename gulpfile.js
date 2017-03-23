@@ -32,6 +32,19 @@ const { notify, reportError } = require('./helpers'),
 
 const { browsers } = pkg;
 
+const htmlminOptions = {
+	removeComments:                true,
+	collapseWhitespace:            true,
+	collapseBooleanAttributes:     true,
+	removeAttributeQuotes:         true,
+	removeRedundantAttributes:     true,
+	useShortDoctype:               true,
+	removeEmptyAttributes:         true,
+	removeScriptTypeAttributes:    true,
+	removeStyleLinkTypeAttributes: true,
+	minifyJS:                      true
+};
+
 const paths = {
 	html:   'src/*.html',
 	images: 'src/images/**/*.{jpg,webp,png,svg,gif}',
@@ -71,7 +84,7 @@ gulp.task('html:build', gulp.series('html:lint', () =>
 	gulp.src(paths.html)
 		.pipe(replace('ASSETS_VERSION', new Date().getTime()))
 		.pipe(procss({ base: 'dist', useXHR: true }))
-		.pipe(htmlmin({ collapseWhitespace: true }))
+		.pipe(htmlmin(htmlminOptions))
 		.on('error', reportError)
 		.pipe(gulp.dest(paths.dest.root))
 		.pipe(notify('HTML files are compiled.'))
